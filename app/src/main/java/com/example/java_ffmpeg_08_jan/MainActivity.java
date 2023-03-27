@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.example.java_ffmpeg_08_jan.PathFinder;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
@@ -37,7 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_TAKE_GALLERY_VIDEO = 100;
     Date dateThreshold = new Date(2023, 1, 20);
     private Uri selectedMediaUri[];
+    private Context context;
     ArrayList<Uri> selectedPaths = new ArrayList<>();
+    ArrayList<String> realPaths = new ArrayList<>();
     private ProgressDialog progressDialog;
     ImageView thumbnailImageView;
     GridView gridView;
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         final Button button = findViewById(R.id.OnClickListener);
         thumbnailImageView = findViewById(R.id.thumbnailImageView);
         gridView = findViewById(R.id.grid_view);
+        context = getApplicationContext();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             Intent intent = new Intent();
             intent.setType("image/*, video/*");
+            //intent.setType("video/*");
+            //intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -129,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult ( int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) if (resultCode == RESULT_OK) {
-            Log.d("YT_AutoUpload", "onActivityResult - RESULT_OK");
+        if (resultCode == RESULT_OK) {
+            Log.d("YT_AutoUpload", " - RESULT_OK");
             // Get the Uri of the selected file
             if (data.getClipData() != null) {
 
@@ -150,9 +157,13 @@ public class MainActivity extends AppCompatActivity {
                         paths.add(data.getClipData().getItemAt(i).getUri().toString());
                         Uri selectedUri = data.getClipData().getItemAt(i).getUri();
                         selectedPaths.add(data.getClipData().getItemAt(i).getUri());
+                        realPaths.add(PathFinder.getPath(context, selectedPaths.get(i)));
                         //selectedMediaUri.add(selectedUri);
                     }
                     Log.d("YT_AutoUpload", "Selected URI : " + selectedPaths);
+                    //ArrayList<String> realPaths = PathFinder.getPath(context, selectedPaths.get(0));
+                    //String realPaths = PathFinder.getPath(context, selectedPaths.get(0));
+                    Log.d("YT_AutoUpload", "Selected Media Paths : " + realPaths);
                     displayThumbnails(selectedPaths);
                     //gridView.setAdapter(new ImageAdapter(this, selectedPaths));
                     // Do something with the paths
