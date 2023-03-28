@@ -1,4 +1,5 @@
 package com.example.java_ffmpeg_08_jan;
+import org.python.util.PythonInterpreter;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -31,6 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.example.java_ffmpeg_08_jan.PathFinder;
+//import com.example.java_ffmpeg_08_jan.PyInterpreter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
 
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 if (Build.VERSION.SDK_INT >= 23)
@@ -164,6 +167,11 @@ public class MainActivity extends AppCompatActivity {
                     //ArrayList<String> realPaths = PathFinder.getPath(context, selectedPaths.get(0));
                     //String realPaths = PathFinder.getPath(context, selectedPaths.get(0));
                     Log.d("YT_AutoUpload", "Selected Media Paths : " + realPaths);
+
+                    PythonInterpreter interpreter = new PythonInterpreter();
+                    interpreter.exec("print('Hello, world!')");
+
+
                     displayThumbnails(selectedPaths);
                     //gridView.setAdapter(new ImageAdapter(this, selectedPaths));
                     // Do something with the paths
